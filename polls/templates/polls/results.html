@@ -1,0 +1,30 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Resultados: {{ question.question_text }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="{% url 'polls:index' %}" class="back-link">&larr; Volver a encuestas</a>
+    <h1>Resultados</h1>
+    <h2 class="results-question">{{ question.question_text }}</h2>
+    {% if question.description %}
+        <p class="question-description-detail">{{ question.description }}</p>
+    {% endif %}
+</div>
+
+<div class="results-container">
+    {% for choice in question.choice_set.all %}
+    {% with total=question.choice_set.all|length %}
+    <div class="result-item">
+        <div class="result-label">{{ choice.choice_text }}</div>
+        <div class="result-bar-wrap">
+            <div class="result-bar" style="width: {{ choice.votes }}px; max-width: 400px;"></div>
+            <span class="result-votes">{{ choice.votes }} voto{{ choice.votes|pluralize }}</span>
+        </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+</div>
+
+<a href="{% url 'polls:detail' question.id %}" class="btn btn-secondary">Votar de nuevo</a>
+{% endblock %}

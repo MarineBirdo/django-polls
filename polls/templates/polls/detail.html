@@ -1,0 +1,35 @@
+{% extends "polls/base.html" %}
+
+{% block title %}{{ question.question_text }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="{% url 'polls:index' %}" class="back-link">&larr; Volver a encuestas</a>
+    <h1>{{ question.question_text }}</h1>
+    {% if question.description %}
+        <p class="question-description-detail">{{ question.description }}</p>
+    {% endif %}
+</div>
+
+{% if error_message %}
+    <div class="alert alert-error">
+        <strong>Error:</strong> {{ error_message }}
+    </div>
+{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="post" class="vote-form">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Selecciona una opción:</legend>
+        {% for choice in question.choice_set.all %}
+        <div class="choice-option">
+            <label>
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                {{ choice.choice_text }}
+            </label>
+        </div>
+        {% endfor %}
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Votar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Lista de Encuestas{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Encuestas disponibles</h1>
+    <p class="subtitle">Participa en nuestras encuestas y hace oír tu voz.</p>
+</div>
+
+{% if latest_question_list %}
+    <ul class="question-list">
+        {% for question in latest_question_list %}
+        <li class="question-card">
+            <a href="{% url 'polls:detail' question.id %}" class="question-link">
+                {{ question.question_text }}
+            </a>
+            {% if question.description %}
+                <p class="question-description">{{ question.description }}</p>
+            {% endif %}
+            <span class="question-date">Publicada: {{ question.pub_date|date:"d/m/Y" }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="empty-state">
+        <p>No hay encuestas disponibles por el momento.</p>
+    </div>
+{% endif %}
+{% endblock %}
